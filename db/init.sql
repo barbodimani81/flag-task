@@ -1,0 +1,26 @@
+CREATE TABLE IF NOT EXISTS feature_flags (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) UNIQUE NOT NULL,
+    enabled BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS dependencies (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    flag_id INT NOT NULL,
+    depends_on_id INT NOT NULL,
+    FOREIGN KEY (flag_id) REFERENCES feature_flags(id) ON DELETE CASCADE,
+    FOREIGN KEY (depends_on_id) REFERENCES feature_flags(id) ON DELETE CASCADE,
+    UNIQUE(flag_id, depends_on_id)
+);
+
+CREATE TABLE IF NOT EXISTS audit_logs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    flag_id INT NOT NULL,
+    action VARCHAR(50) NOT NULL,
+    reason TEXT,
+    actor VARCHAR(100),
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (flag_id) REFERENCES feature_flags(id) ON DELETE CASCADE
+);

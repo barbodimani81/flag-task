@@ -77,3 +77,12 @@ Create a `.env` file with the following variables:
 ```env
 DB_DSN=root:password@tcp(db:3306)/feature_flags?parseTime=true
 PORT=8080
+
+## API Usage Examples
+
+### 📌 Create a Feature Flag
+
+```bash
+curl -X POST http://localhost:8080/flags \
+  -H "Content-Type: application/json" \
+  -d '{"name":"auth","dependencies":[]}'
